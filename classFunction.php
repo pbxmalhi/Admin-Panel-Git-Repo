@@ -128,7 +128,18 @@ class adminPanel
             }
             return $data;
         } else {
-            return 0;
+            echo "<h3>Page Not Found!</h3>";
+            $query = "select * from page";
+            $result = $this->connect->query($query);
+            if ($result->num_rows > 0) {
+                $data = array();
+                while ($row = $result->fetch_assoc()) {
+                    $data[] = $row;
+                }
+                return $data;
+            } else {
+                echo "There is an error in the code";
+            }
         }
     }
 
@@ -213,7 +224,6 @@ class adminPanel
     public function searchCatData($post)
     {
         $name = $this->connect->real_escape_string($_POST['catname']);
-        echo $name;
         $query = "select * from category where categoryname like '%$name%'";
         $result = $this->connect->query($query);
         $data = array();
@@ -223,7 +233,18 @@ class adminPanel
             }
             return $data;
         } else {
-            return 0;
+            echo "<h3>Category Not Found!</h3>";
+            $query = "select * from category";
+            $result = $this->connect->query($query);
+            if ($result->num_rows > 0) {
+                $data = array();
+                while ($row = $result->fetch_assoc()) {
+                    $data[] = $row;
+                }
+                return $data;
+            } else {
+                echo "There is an error in the code";
+            }
         }
     }
 
@@ -397,7 +418,7 @@ class adminPanel
     public function productSearch()
     {
         $pname = $this->connect->real_escape_string($_REQUEST['pname']);
-        $query = "select * from product where productname like '%$pname%'";
+        $query = "select p.*, c.categoryname from product p, category c where c.id = p.category_id and productname like '%$pname%'";
         $result = $this->connect->query($query);
         if ($result->num_rows > 0) {
             $searchResult = array();
@@ -406,7 +427,18 @@ class adminPanel
             }
             return $searchResult;
         } else {
-            echo "There is an error int the code";
+            echo "<h3>Product Not Found!</h3>";
+            $query = "select p.*, c.categoryname from product p, category c where c.id = p.category_id";
+            $result = $this->connect->query($query);
+            if ($result->num_rows > 0) {
+                $pdata = array();
+                while ($row = $result->fetch_assoc()) {
+                    $pdata[] = $row;
+                }
+                return $pdata;
+            } else {
+                echo "There is an error in the code";
+            }
         }
     }
 
